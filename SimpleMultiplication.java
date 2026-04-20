@@ -1,4 +1,75 @@
+import java.util.*;
+
 public class SimpleMultiplication {
+    long primitiveOps = 0;
+
+    public int[] multiply(int[] arr1, int[] arr2) {
+        int n = arr1.length; primitiveOps++;
+        int[] finalResult = new int[2 * n]; primitiveOps++;
+
+        for (int i = n - 1; i >= 0; i--) {
+            primitiveOps += 2;
+            int carry = 0; primitiveOps++;
+            StringBuilder partialRow = new StringBuilder();
+            StringBuilder carryRow = new StringBuilder();
+
+            for (int j = n - 1; j >= 0; j--) {
+                primitiveOps += 2;
+                int multi = arr1[j] * arr2[i] + carry + finalResult[i + j + 1];
+                primitiveOps += 4;
+                int partialProduct = multi % 10; primitiveOps++;
+                carry = multi / 10; primitiveOps++;
+                finalResult[i + j + 1] = partialProduct; primitiveOps++;
+                partialRow.insert(0, partialProduct);
+                carryRow.insert(0, carry);
+            }
+            finalResult[i] += carry; primitiveOps++;
+
+            if (n <= 10) {
+                System.out.println("Partial products for x" + arr2[i] + ": " + partialRow);
+                System.out.println("Carriers for x" + arr2[i] + ":        " + carryRow);
+            }
+        }
+        return finalResult;
+    }
+
+    public void printFinalResult(int[] result) {
+        boolean leadingZero = true;
+        System.out.print("Final Result: ");
+        for (int digit : result) {
+            if (leadingZero && digit == 0) continue;
+            leadingZero = false;
+            System.out.print(digit);
+        }
+        if (leadingZero) System.out.print(0);
+        System.out.println();
+    }
+
+    public int[] generateRandomNumber(int n, Random rand) {
+        int[] num = new int[n];
+        num[0] = rand.nextInt(9) + 1;
+        for (int i = 1; i < n; i++) num[i] = rand.nextInt(10);
+        return num;
+    }
+
+    public static void main(String[] args) {
+        SimpleMultiplication sm = new SimpleMultiplication();
+        Random rand = new Random();
+        int[] testSizes = {5, 10, 50, 100, 500, 1000};
+
+        System.out.println("n\tPrimitive Operations");
+        for (int n : testSizes) {
+            sm.primitiveOps = 0;
+            int[] num1 = sm.generateRandomNumber(n, rand);
+            int[] num2 = sm.generateRandomNumber(n, rand);
+            int[] result = sm.multiply(num1, num2);
+            if (n <= 10) sm.printFinalResult(result);
+            System.out.println(n + "\t" + sm.primitiveOps);
+        }
+    }
+}
+
+/*public class SimpleMultiplication {
     long primitiveOps = 0;
 
     public int[] multiply(int[] arr1, int[] arr2){
@@ -76,4 +147,4 @@ public class SimpleMultiplication {
         System.out.println("Total Primitive Operations: " + sm.primitiveOps);
     }
 
-}
+}*/
