@@ -2,11 +2,11 @@ import java.math.BigInteger;
 import java.util.Random;
 
 class Karatsuba {
-    // Global counter for primitive operations (Part 2a)
+    // Global counter for primitive operations 
     public static long opCount = 0;
 
     public static BigInteger mult(BigInteger x, BigInteger y) {
-        opCount++; // Counter for method call [cite: 43, 55]
+        opCount++; // Counter for method call 
 
         // Checking if input is single digit (Base Case)
         if (x.compareTo(BigInteger.TEN) < 0 && y.compareTo(BigInteger.TEN) < 0) {
